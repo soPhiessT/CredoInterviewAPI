@@ -1,13 +1,24 @@
 package Util;
+
+import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 
 public class Utils {
-    public static void configureWireMockClient() {
+    private static WireMockServer wireMockServer;
+
+    public static void startWireMockServer() {
+        wireMockServer = new WireMockServer();
+        wireMockServer.start();
         WireMock.configureFor("localhost", 8080);
-        WireMock.reset();
+    }
+
+    public static void stopWireMockServer() {
+        if (wireMockServer != null && wireMockServer.isRunning()) {
+            wireMockServer.stop();
+        }
     }
 
     public static void configureStubs() {

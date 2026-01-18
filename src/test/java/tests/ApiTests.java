@@ -7,7 +7,8 @@ import Util.Utils;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -21,11 +22,16 @@ import static org.testng.Assert.assertNotNull;
 @Listeners(TestResultListener.class)
 public class ApiTests {
 
-    @BeforeClass
-    public void setup() {
+    @BeforeSuite
+    static void setup() {
+        Utils.startWireMockServer();
         RestAssured.baseURI = BASE_URL;
-        Utils.configureWireMockClient();
         Utils.configureStubs();
+    }
+
+    @AfterSuite
+    static void tearDown() {
+        Utils.stopWireMockServer();
     }
 
     /**
